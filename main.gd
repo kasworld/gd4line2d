@@ -2,12 +2,24 @@ extends Node2D
 
 var line_scene = preload("res://move_line2d/move_line_2d.tscn")
 
-var mv_ln :Node2D
+const mv_ln_count = 1
+var mv_ln_list :Array
 func _ready() -> void:
-	mv_ln = line_scene.instantiate()
-	mv_ln.init(200,2)
-	add_child(mv_ln)
+	for i in mv_ln_count:
+		make_mv_ln()
+
+func make_mv_ln():
+	var mvln = line_scene.instantiate()
+	mvln.init(100,2)
+	add_child(mvln)
+	mv_ln_list.append(mvln)
 
 func _process(delta: float) -> void:
-	mv_ln.move(delta)
+	for o in mv_ln_list:
+		o.move(delta)
 
+# esc to exit
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_ESCAPE:
+			get_tree().quit()

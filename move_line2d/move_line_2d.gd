@@ -11,15 +11,6 @@ func init(ln_count :int, pt_count :int):
 	line_count = ln_count
 	point_count = pt_count
 
-func new_line(pos_list :PackedVector2Array, co_list :PackedColorArray)->Line2D:
-	var gr = Gradient.new()
-	gr.colors = co_list
-	var ln = Line2D.new()
-	ln.points = pos_list
-	ln.gradient = gr
-	ln.width = 1
-	return ln
-
 func _ready() -> void:
 	vp_size = get_viewport_rect().size
 	velocity_list = make_vel_list(point_count, vp_size)
@@ -29,6 +20,15 @@ func _ready() -> void:
 		var ln = new_line(pos_list, co_list)
 		add_child(ln)
 		line_list.append(ln)
+
+func new_line(pos_list :PackedVector2Array, co_list :PackedColorArray)->Line2D:
+	var gr = Gradient.new()
+	gr.colors = co_list
+	var ln = Line2D.new()
+	ln.points = pos_list
+	ln.gradient = gr
+	ln.width = 1
+	return ln
 
 func move(delta :float)->void:
 	var old_line = line_list[line_cursor%line_count]
