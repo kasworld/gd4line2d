@@ -2,7 +2,8 @@ extends Node2D
 
 var velocity_list :PackedVector2Array
 
-func init(pos_list:PackedVector2Array, co_list :PackedColorArray):
+func init(pos_list :PackedVector2Array, vt_list :PackedVector2Array, co_list :PackedColorArray):
+	velocity_list = vt_list
 	var gr = Gradient.new()
 	gr.colors = co_list
 	var offset = PackedFloat32Array()
@@ -10,12 +11,19 @@ func init(pos_list:PackedVector2Array, co_list :PackedColorArray):
 	$Line2D.gradient = gr
 	$Line2D.width = 5
 
+func get_points()->PackedVector2Array:
+	return $Line2D.points.duplicate()
+
+func get_velocity_list()->PackedVector2Array:
+	return velocity_list.duplicate()
+
 var vp_size :Vector2
 func _ready() -> void:
 	vp_size = get_viewport_rect().size
-	velocity_list = []
-	for i in  $Line2D.points.size():
-		velocity_list.append(random_vel_vector2d(vp_size))
+
+func set_pos_vel(pos_list :PackedVector2Array, vt_list :PackedVector2Array)->void:
+	$Line2D.points = pos_list
+	velocity_list = vt_list
 
 func move(delta: float) -> void:
 	for i in velocity_list.size():
@@ -23,25 +31,6 @@ func move(delta: float) -> void:
 		var bn = bounce($Line2D.points[i],velocity_list[i],vp_size,$Line2D.width/2)
 		$Line2D.points[i] = bn.pos
 		velocity_list[i] = bn.vel
-#		if bn.xbounce != 0 :
-#			velocity_list[i].x = -random_positive(vp_size.x/2)*bn.xbounce
-#		if bn.ybounce != 0 :
-#			velocity_list[i].y = -random_positive(vp_size.y/2)*bn.ybounce
-
-func random_vel_vector2d(vt :Vector2)->Vector2:
-	return Vector2(random_no_zero(vt.x),random_no_zero(vt.y))
-
-func random_no_zero(w :float)->float:
-	var v = random_positive(w/2)
-	match randi_range(1,2):
-		1:
-			pass
-		2:
-			v = -v
-	return v
-
-func random_positive(w :float)->float:
-	return randf_range(w/10,w)
 
 func bounce(pos :Vector2,vel :Vector2, bound :Vector2, radius :float)->Dictionary:
 	var xbounce = 0
