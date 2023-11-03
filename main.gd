@@ -10,13 +10,13 @@ func _ready() -> void:
 
 func make_mv_ln():
 	var mvln = line_scene.instantiate()
-	mvln.init(100,2)
+	mvln.init(200,2)
 	add_child(mvln)
 	mv_ln_list.append(mvln)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	for o in mv_ln_list:
-		o.move(delta)
+		o.move(1.0/60.0)
 
 # esc to exit
 func _unhandled_input(event: InputEvent) -> void:
