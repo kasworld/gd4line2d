@@ -43,6 +43,12 @@ func move_line(delta: float, ln :Line2D) -> void:
 		ln.points[i] = bn.pos
 		velocity_list[i] = bn.vel
 
+		# change vel on bounce
+		if bn.xbounce != 0 :
+			velocity_list[i].x = -random_positive(vp_size.x/2)*bn.xbounce
+		if bn.ybounce != 0 :
+			velocity_list[i].y = -random_positive(vp_size.y/2)*bn.ybounce
+
 # util functions
 
 func bounce(pos :Vector2,vel :Vector2, bound :Vector2, radius :float)->Dictionary:
