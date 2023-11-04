@@ -5,12 +5,13 @@ var line_scene = preload("res://move_line2d/move_line_2d.tscn")
 const mv_ln_count = 1
 var mv_ln_list :Array
 func _ready() -> void:
+	var draw_area = get_viewport_rect().size
 	for i in mv_ln_count:
-		make_mv_ln()
+		make_mv_ln(draw_area)
 
-func make_mv_ln():
+func make_mv_ln(draw_area :Vector2):
 	var mvln = line_scene.instantiate()
-	mvln.init(200,2)
+	mvln.init(600,2,draw_area)
 	add_child(mvln)
 	mv_ln_list.append(mvln)
 

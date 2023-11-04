@@ -4,19 +4,19 @@ var velocity_list :PackedVector2Array
 var line_list :Array
 var line_cursor :int
 var line_count :int
-var vp_size :Vector2
+var draw_area :Vector2
 var point_count :int
 var gradiant :Gradient
 
-func init(ln_count :int, pt_count :int):
+func init(ln_count :int, pt_count :int, area_size :Vector2 ):
 	line_count = ln_count
 	point_count = pt_count
+	draw_area = area_size
 
 func _ready() -> void:
-	vp_size = get_viewport_rect().size
-	velocity_list = make_vel_list(point_count, vp_size)
+	velocity_list = make_vel_list(point_count, draw_area)
 	gradiant = new_gradiant()
-	var pos_list = make_pos_list(point_count, vp_size)
+	var pos_list = make_pos_list(point_count, draw_area)
 	for i in line_count:
 		var ln = new_line(pos_list)
 		add_child(ln)
@@ -45,16 +45,16 @@ func move_line(delta: float, ln :Line2D) -> void:
 	var bounced = false
 	for i in velocity_list.size():
 		ln.points[i] += velocity_list[i] *delta
-		var bn = bounce(ln.points[i],velocity_list[i],vp_size,ln.width/2)
+		var bn = bounce(ln.points[i],velocity_list[i],draw_area,ln.width/2)
 		ln.points[i] = bn.pos
 		velocity_list[i] = bn.vel
 
 		# change vel on bounce
 		if bn.xbounce != 0 :
-			velocity_list[i].x = -random_positive(vp_size.x/2)*bn.xbounce
+			velocity_list[i].x = -random_positive(draw_area.x/2)*bn.xbounce
 			bounced = true
 		if bn.ybounce != 0 :
-			velocity_list[i].y = -random_positive(vp_size.y/2)*bn.ybounce
+			velocity_list[i].y = -random_positive(draw_area.y/2)*bn.ybounce
 			bounced = true
 	if bounced :
 		gradiant = new_gradiant()
