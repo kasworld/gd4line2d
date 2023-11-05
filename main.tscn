@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ck82ypijo2k53"]
+[gd_scene load_steps=3 format=3 uid="uid://ck82ypijo2k53"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_jg4by"]
+[ext_resource type="PackedScene" uid="uid://bf1vkxi8i0lm1" path="res://ani_move/ani_move.tscn" id="2_qmpi8"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_jg4by")
+
+[node name="AniMove" parent="." instance=ExtResource("2_qmpi8")]
