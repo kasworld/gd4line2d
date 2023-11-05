@@ -7,7 +7,7 @@ var line_count :int
 var draw_area :Vector2
 var point_count :int
 var gradiant :Gradient
-const line_width = 1.5
+const line_width = 1
 
 func init(ln_count :int, pt_count :int, area_size :Vector2 ):
 	line_count = ln_count
