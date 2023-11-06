@@ -69,8 +69,8 @@ func move_line(delta: float, ln :Line2D) -> void:
 	for i in velocity_list.size():
 		ln.points[i] += velocity_list[i] *delta
 		var bn = bounce(ln.points[i],velocity_list[i],draw_area,ln.width/2)
-		ln.points[i] = bn.pos
-		velocity_list[i] = bn.vel
+		ln.points[i] = bn.position
+		velocity_list[i] = bn.velocity
 
 		# change vel on bounce
 		if bn.xbounce != 0 :
@@ -105,11 +105,12 @@ func bounce(pos :Vector2,vel :Vector2, bound :Rect2, radius :float)->Dictionary:
 		vel.y = -abs(vel.y)
 		ybounce = 1
 	return {
-		pos = pos,
-		vel = vel,
+		position = pos,
+		velocity = vel,
 		xbounce = xbounce,
 		ybounce = ybounce,
 	}
+
 
 func make_pos_list(count :int, rt :Rect2)->PackedVector2Array:
 	var rtn = []
