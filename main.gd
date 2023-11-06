@@ -6,17 +6,17 @@ const mv_ln_count = 4
 var mv_ln_list :Array
 var mv_ln_pos_list :Array
 func _ready() -> void:
-	var draw_area = get_viewport_rect().size
-	mv_ln_pos_list.append(Vector2(0,0))
-	mv_ln_pos_list.append(Vector2(draw_area.x/2,0))
-	mv_ln_pos_list.append(Vector2(draw_area.x/2,draw_area.y/2))
-	mv_ln_pos_list.append(Vector2(0,draw_area.y/2))
+	var draw_area = get_viewport_rect()
+	mv_ln_pos_list.append(Vector2(draw_area.position.x, draw_area.position.y))
+	mv_ln_pos_list.append(Vector2(draw_area.position.x+draw_area.size.x/2, draw_area.position.y))
+	mv_ln_pos_list.append(Vector2(draw_area.position.x+draw_area.size.x/2, draw_area.position.y+draw_area.size.y/2))
+	mv_ln_pos_list.append(Vector2(draw_area.position.x, draw_area.position.y+draw_area.size.y/2))
 	for i in mv_ln_count:
-		make_mv_ln(600,2,draw_area/2)
+		make_mv_ln(600,2,Rect2(draw_area.position, draw_area.size/2))
 		mv_ln_list[i].position = mv_ln_pos_list[i]
 	$AniMove.start(3)
 
-func make_mv_ln(line_count :int, point_count:int, draw_area :Vector2):
+func make_mv_ln(line_count :int, point_count:int, draw_area :Rect2):
 	var mvln = line_scene.instantiate()
 	mvln.init(line_count,point_count,draw_area)
 	add_child(mvln)
@@ -26,6 +26,7 @@ func _process(_delta: float) -> void:
 	animove_step()
 	for o in mv_ln_list:
 		o.move(1.0/60.0)
+#		o.rotate(o.get_angle())
 
 # esc to exit
 func _unhandled_input(event: InputEvent) -> void:

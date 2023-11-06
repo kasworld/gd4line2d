@@ -4,12 +4,12 @@ var velocity_list :PackedVector2Array
 var line_list :Array
 var line_cursor :int
 var line_count :int
-var draw_area :Vector2
+var draw_area :Rect2
 var point_count :int
 var gradiant :Gradient
 const line_width = 1
 
-func init(ln_count :int, pt_count :int, area_size :Vector2 ):
+func init(ln_count :int, pt_count :int, area_size :Rect2 ):
 	line_count = ln_count
 	point_count = pt_count
 	draw_area = area_size
@@ -36,6 +36,20 @@ func new_gradiant()->Gradient:
 	gr.colors = co_list
 	return gr
 
+# return radian
+func get_line_angle()->float:
+	var old_line = line_list[line_cursor%line_count]
+	var p1 = old_line.points[0]
+	var p2 = old_line.points[-1]
+	return p1.angle_to_point(p2)
+
+func get_line_center()->Vector2:
+	var old_line = line_list[line_cursor%line_count]
+	var sum = Vector2(0,0)
+	for v in old_line.points:
+		sum += v
+	return sum / line_count
+
 func move(delta :float)->void:
 	var old_line = line_list[line_cursor%line_count]
 	line_cursor +=1
@@ -52,10 +66,10 @@ func move_line(delta: float, ln :Line2D) -> void:
 
 		# change vel on bounce
 		if bn.xbounce != 0 :
-			velocity_list[i].x = -random_positive(draw_area.x/2)*bn.xbounce
+			velocity_list[i].x = -random_positive(draw_area.size.x/2)*bn.xbounce
 			bounced = true
 		if bn.ybounce != 0 :
-			velocity_list[i].y = -random_positive(draw_area.y/2)*bn.ybounce
+			velocity_list[i].y = -random_positive(draw_area.size.y/2)*bn.ybounce
 			bounced = true
 	if bounced :
 		gradiant = new_gradiant()
@@ -63,23 +77,23 @@ func move_line(delta: float, ln :Line2D) -> void:
 
 # util functions
 
-func bounce(pos :Vector2,vel :Vector2, bound :Vector2, radius :float)->Dictionary:
+func bounce(pos :Vector2,vel :Vector2, bound :Rect2, radius :float)->Dictionary:
 	var xbounce = 0
 	var ybounce = 0
-	if pos.x < radius :
-		pos.x = radius
+	if pos.x < bound.position.x + radius :
+		pos.x = bound.position.x + radius
 		vel.x = abs(vel.x)
 		xbounce = -1
-	elif pos.x > bound.x - radius:
-		pos.x = bound.x - radius
+	elif pos.x > bound.end.x - radius:
+		pos.x = bound.end.x - radius
 		vel.x = -abs(vel.x)
 		xbounce = 1
-	if pos.y < radius :
-		pos.y = radius
+	if pos.y < bound.position.y + radius :
+		pos.y = bound.position.y + radius
 		vel.y = abs(vel.y)
 		ybounce = -1
-	elif pos.y > bound.y - radius:
-		pos.y = bound.y - radius
+	elif pos.y > bound.end.y - radius:
+		pos.y = bound.end.y - radius
 		vel.y = -abs(vel.y)
 		ybounce = 1
 	return {
@@ -89,23 +103,23 @@ func bounce(pos :Vector2,vel :Vector2, bound :Vector2, radius :float)->Dictionar
 		ybounce = ybounce,
 	}
 
-func make_pos_list(count :int, vt :Vector2)->PackedVector2Array:
+func make_pos_list(count :int, rt :Rect2)->PackedVector2Array:
 	var rtn = []
 	for j in count:
-		rtn.append(random_pos_vector2d(vt))
+		rtn.append(random_pos_vector2d(rt))
 	return rtn
 
-func random_pos_vector2d(vt :Vector2)->Vector2:
-	return Vector2( randf_range(0,vt.x), randf_range(0,vt.y) )
+func random_pos_vector2d(rt :Rect2)->Vector2:
+	return Vector2( randf_range(rt.position.x,rt.end.x), randf_range(rt.position.y,rt.end.y) )
 
-func make_vel_list(count :int, vt :Vector2)->PackedVector2Array:
+func make_vel_list(count :int, rt :Rect2)->PackedVector2Array:
 	var rtn = []
 	for i in  count:
-		rtn.append(random_vel_vector2d(vt))
+		rtn.append(random_vel_vector2d(rt))
 	return rtn
 
-func random_vel_vector2d(vt :Vector2)->Vector2:
-	return Vector2(random_no_zero(vt.x),random_no_zero(vt.y))
+func random_vel_vector2d(rt :Rect2)->Vector2:
+	return Vector2(random_no_zero(rt.size.x),random_no_zero(rt.size.y))
 
 func random_no_zero(w :float)->float:
 	var v = random_positive(w/2)
