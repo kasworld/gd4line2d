@@ -15,6 +15,7 @@ func init(ln_count :int, pt_count :int, area_size :Rect2 ):
 	draw_area = area_size
 
 func _ready() -> void:
+#	add_child(boundbox(draw_area))
 	velocity_list = make_vel_list(point_count, draw_area)
 	gradiant = new_gradiant()
 	var pos_list = make_pos_list(point_count, draw_area)
@@ -36,19 +37,26 @@ func new_gradiant()->Gradient:
 	gr.colors = co_list
 	return gr
 
+func boundbox(rt :Rect2)->Line2D:
+	var ln = Line2D.new()
+	ln.points = [rt.position, Vector2(rt.position.x,rt.end.y), rt.end, Vector2(rt.end.x, rt.position.y), rt.position]
+	ln.default_color = Color.WHITE
+	ln.width = 1
+	return ln
+
 # return radian
 func get_line_angle()->float:
-	var old_line = line_list[line_cursor%line_count]
-	var p1 = old_line.points[0]
-	var p2 = old_line.points[-1]
+	var cur_line = line_list[line_cursor%line_count]
+	var p1 = cur_line.points[0]
+	var p2 = cur_line.points[-1]
 	return p1.angle_to_point(p2)
 
 func get_line_center()->Vector2:
-	var old_line = line_list[line_cursor%line_count]
+	var cur_line = line_list[line_cursor%line_count]
 	var sum = Vector2(0,0)
-	for v in old_line.points:
+	for v in cur_line.points:
 		sum += v
-	return sum / line_count
+	return sum / point_count
 
 func move(delta :float)->void:
 	var old_line = line_list[line_cursor%line_count]

@@ -25,6 +25,10 @@ window/size/mode=2
 window/stretch/mode="canvas_items"
 window/stretch/aspect="ignore"
 
+[editor]
+
+movie_writer/movie_file="d:/work/output.avi"
+
 [rendering]
 
 textures/vram_compression/import_etc2_astc=true
