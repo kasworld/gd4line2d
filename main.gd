@@ -31,6 +31,11 @@ func _ready() -> void:
 #	make_1()
 	make_4()
 
+	var msgrect = Rect2( draw_area.size.x * 0.2 ,draw_area.size.y * 0.4 , draw_area.size.x * 0.6 , draw_area.size.y * 0.2   )
+	$TimedMessage.init(msgrect, tr("gd4line2d 2.0"))
+	$TimedMessage.show_message("시작합니다.")
+
+
 func make_mv_ln(line_count :int, point_count:int, draw_area :Rect2):
 	var mvln = line_scene.instantiate()
 	mvln.init(line_count,point_count,draw_area)
