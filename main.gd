@@ -32,8 +32,8 @@ func _ready() -> void:
 	make_4()
 
 	var msgrect = Rect2( draw_area.size.x * 0.2 ,draw_area.size.y * 0.4 , draw_area.size.x * 0.6 , draw_area.size.y * 0.2   )
-	$TimedMessage.init(msgrect, tr("gd4line2d 2.0"))
-	$TimedMessage.show_message("시작합니다.")
+	$TimedMessage.init(msgrect, tr("gd4line2d 2.0.1"))
+	$TimedMessage.show_message("Copyright 2023 SeukWon Kang (kasworld@gmail.com)")
 
 
 func make_mv_ln(line_count :int, point_count:int, draw_area :Rect2):
